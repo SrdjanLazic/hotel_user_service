@@ -33,6 +33,7 @@ public class ClientController {
                             "Default sort order is ascending. " +
                             "Multiple sort criteria are supported.")})
 
+    // TODO: treba izmeniti check security
     @GetMapping
     @CheckSecurity(roles = {"ROLE_ADMIN", "ROLE_CLIENT", "ROLE_MANAGER"})
     public ResponseEntity<Page<ClientDto>> getAllClients(@RequestHeader("Authorization") String authorization,
@@ -52,7 +53,6 @@ public class ClientController {
         return new ResponseEntity<>(clientService.findDiscount(id), HttpStatus.OK);
     }
 
-    // TODO: da li put ili get?
     @PutMapping("/{id}/ban")
     @CheckSecurity(roles = {"ROLE_ADMIN"})
     public ResponseEntity<Void> banClient(@RequestHeader("Authorization") String authorization, @PathVariable("id") Long id){
@@ -60,20 +60,19 @@ public class ClientController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    // TODO: videti da li moze da bude i samo /id
-    @PutMapping("/{id}/update")
-    @CheckSecurity(roles = {"ROLE_CLIENT", "ROLE_ADMIN"})
-    public ResponseEntity<ClientDto> updateClientProfile(@PathVariable("id") Long id, @RequestBody @Valid ClientUpdateDto clientUpdateDto) {
-        clientService.updateClientProfile(id, clientUpdateDto);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    // TODO: da li put ili get?
     @PutMapping("/{id}/unban")
     @CheckSecurity(roles = {"ROLE_ADMIN"})
     public ResponseEntity<Void> unbanClient(@RequestHeader("Authorization") String authorization, @PathVariable("id") Long id){
         clientService.unbanClient(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    // TODO: videti da li moze da bude i samo /id
+    @PutMapping("/{id}/update")
+    @CheckSecurity(roles = {"ROLE_CLIENT", "ROLE_ADMIN"})
+    public ResponseEntity<ClientDto> updateClientProfile(@RequestHeader("Authorization") String authorization,
+                                                         @PathVariable("id") Long id, @RequestBody @Valid ClientUpdateDto clientUpdateDto) {
+        return ResponseEntity.ok(clientService.updateClientProfile(id, clientUpdateDto));
     }
 
     @ApiOperation(value = "Register client")

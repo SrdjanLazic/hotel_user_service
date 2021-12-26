@@ -1,5 +1,6 @@
 package com.raf.hoteluserservice.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
@@ -21,9 +22,9 @@ public class ManagerCreateDto {
     private String password;
     @NotBlank
     private String phoneNumber;
-    @NotBlank
+    @JsonFormat(pattern="dd-MM-yyyy")
     private LocalDate birthday;
-    @NotBlank
+    @JsonFormat(pattern="dd-MM-yyyy")
     private LocalDate employmentDate;
 
     // TODO:

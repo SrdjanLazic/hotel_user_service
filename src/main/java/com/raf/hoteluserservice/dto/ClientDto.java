@@ -1,5 +1,7 @@
 package com.raf.hoteluserservice.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.LocalDate;
 
 public class ClientDto {
@@ -10,6 +12,7 @@ public class ClientDto {
     private String username;
     private String email;
     private String phoneNumber;
+    @JsonFormat(pattern="dd-MM-yyyy")
     private LocalDate birthday;
     private String passportNumber;
     private Integer numberOfReservations;

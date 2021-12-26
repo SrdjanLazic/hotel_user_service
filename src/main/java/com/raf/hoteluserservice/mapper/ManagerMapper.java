@@ -13,7 +13,7 @@ public class ManagerMapper {
 
     private RoleRepository roleRepository;
 
-    public ManagerMapper(ManagerRepository managerRepository) {
+    public ManagerMapper(RoleRepository roleRepository) {
         this.roleRepository = roleRepository;
     }
 
@@ -31,7 +31,6 @@ public class ManagerMapper {
         return managerDto;
     }
 
-
     public Manager managerCreateDtoToManager(ManagerCreateDto managerCreateDto) {
 
         Manager manager = new Manager();
@@ -47,6 +46,8 @@ public class ManagerMapper {
         //manager.setHotel(managerCreateDto.getHotel());
         // TODO: popuniti polja za hotel
         //Hotel hotel = new Hotel();
+        manager.setAccess(true);
+        manager.setVerifiedMail(false);
         return manager;
     }
 }

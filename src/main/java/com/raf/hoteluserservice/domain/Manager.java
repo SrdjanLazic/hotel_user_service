@@ -1,5 +1,7 @@
 package com.raf.hoteluserservice.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -16,6 +18,7 @@ public class Manager {
     private String password;
     private String email;
     private String phoneNumber;
+    @JsonFormat(pattern="dd-MM-yyyy")
     private LocalDate birthday;
 
     // TODO: proveriti
@@ -26,6 +29,7 @@ public class Manager {
     @ManyToOne(optional = false)
     private Role role; // privilegije
     private boolean access = true;
+    @JsonFormat(pattern="dd-MM-yyyy")
     private LocalDate employmentDate;
     private boolean verifiedMail = false;
 
@@ -126,5 +130,13 @@ public class Manager {
 
     public void setAccess(boolean access) {
         this.access = access;
+    }
+
+    public boolean isVerifiedMail() {
+        return verifiedMail;
+    }
+
+    public void setVerifiedMail(boolean verifiedMail) {
+        this.verifiedMail = verifiedMail;
     }
 }

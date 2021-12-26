@@ -28,11 +28,6 @@ public class ClientMapper {
         return clientDto;
     }
 
-    /*
-
-    private boolean verifiedMail = false;
-     */
-
     public Client clientCreateDtoToClient(ClientCreateDto clientCreateDto) {
         Client client = new Client();
         client.setEmail(clientCreateDto.getEmail());

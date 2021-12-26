@@ -1,10 +1,7 @@
 package com.raf.hoteluserservice.controller;
 
 
-import com.raf.hoteluserservice.dto.ManagerCreateDto;
-import com.raf.hoteluserservice.dto.ManagerDto;
-import com.raf.hoteluserservice.dto.TokenRequestDto;
-import com.raf.hoteluserservice.dto.TokenResponseDto;
+import com.raf.hoteluserservice.dto.*;
 import com.raf.hoteluserservice.security.CheckSecurity;
 import com.raf.hoteluserservice.service.ManagerService;
 import io.swagger.annotations.ApiImplicitParam;
@@ -48,15 +45,36 @@ public class ManagerController {
         return new ResponseEntity<>(managerService.findAll(pageable), HttpStatus.OK);
     }
 
+    @PutMapping("/{id}/ban")
+    @CheckSecurity(roles = {"ROLE_ADMIN"})
+    public ResponseEntity<Void> banManager(@RequestHeader("Authorization") String authorization, @PathVariable("id") Long id){
+        managerService.banManager(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}/unban")
+    @CheckSecurity(roles = {"ROLE_ADMIN"})
+    public ResponseEntity<Void> unbanManager(@RequestHeader("Authorization") String authorization, @PathVariable("id") Long id){
+        managerService.unbanManager(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}/update")
+    @CheckSecurity(roles = {"ROLE_MANAGER", "ROLE_ADMIN"})
+    public ResponseEntity<ManagerDto> updateManagerProfile(@RequestHeader("Authorization") String authorization,
+                                                         @PathVariable("id") Long id, @RequestBody @Valid ManagerUpdateDto managerUpdateDto) {
+        return ResponseEntity.ok(managerService.updateManagerProfile(id, managerUpdateDto));
+    }
+
     @ApiOperation(value = "Register manager")
     @PostMapping
-    public ResponseEntity<ManagerDto> saveClient(@RequestBody @Valid ManagerCreateDto managerCreateDto) {
+    public ResponseEntity<ManagerDto> saveManager(@RequestBody @Valid ManagerCreateDto managerCreateDto) {
         return new ResponseEntity<>(managerService.addManager(managerCreateDto), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Login")
     @PostMapping("/login")
-    public ResponseEntity<TokenResponseDto> loginClient(@RequestBody @Valid TokenRequestDto tokenRequestDto) {
+    public ResponseEntity<TokenResponseDto> loginManager(@RequestBody @Valid TokenRequestDto tokenRequestDto) {
         return new ResponseEntity<>(managerService.login(tokenRequestDto), HttpStatus.OK);
     }
 

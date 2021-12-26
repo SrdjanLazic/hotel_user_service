@@ -1,10 +1,10 @@
 package com.raf.hoteluserservice.service.impl;
 
+import com.raf.hoteluserservice.domain.Client;
 import com.raf.hoteluserservice.domain.Manager;
-import com.raf.hoteluserservice.dto.ManagerCreateDto;
-import com.raf.hoteluserservice.dto.ManagerDto;
-import com.raf.hoteluserservice.dto.TokenRequestDto;
-import com.raf.hoteluserservice.dto.TokenResponseDto;
+import com.raf.hoteluserservice.dto.*;
+import com.raf.hoteluserservice.exception.CustomException;
+import com.raf.hoteluserservice.exception.ErrorCode;
 import com.raf.hoteluserservice.exception.NotFoundException;
 import com.raf.hoteluserservice.mapper.ClientMapper;
 import com.raf.hoteluserservice.mapper.ManagerMapper;
@@ -13,8 +13,11 @@ import com.raf.hoteluserservice.repository.ClientRepository;
 import com.raf.hoteluserservice.repository.ManagerRepository;
 import com.raf.hoteluserservice.security.service.TokenService;
 import com.raf.hoteluserservice.service.ManagerService;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,6 +69,64 @@ public class ManagerServiceImpl implements ManagerService {
 
     @Override
     public TokenResponseDto login(TokenRequestDto tokenRequestDto) {
-        return null;
+        //Try to find active user for specified credentials
+        Manager manager = managerRepository
+                .findManagerByEmailAndPassword(tokenRequestDto.getEmail(), tokenRequestDto.getPassword())
+                .orElseThrow(() -> new NotFoundException(String
+                        .format("User with username: %s and password: %s not found.", tokenRequestDto.getEmail(),
+                                tokenRequestDto.getPassword())));
+
+        // TODO: treba implementirati ovu proveru da li je client verifikovan
+//        if (!client.getVerified())
+//            throw new CustomException("Please verify your e-mail address before logging in", ErrorCode.EMAIL_NOT_VERIFIED, HttpStatus.PRECONDITION_FAILED);
+
+        //Create token payload
+
+        if (!manager.isAccess())
+            throw new CustomException("Your account is banned. Contact customer support.", ErrorCode.ACCESS_DENIED, HttpStatus.PRECONDITION_FAILED);
+
+
+        Claims claims = Jwts.claims();
+        claims.put("id", manager.getId());
+        claims.put("role", manager.getRole().getName());
+        //Generate token
+        return new TokenResponseDto(tokenService.generate(claims));
+    }
+
+    @Override
+    public void banManager(Long id) {
+        Manager manager = managerRepository
+                .findById(id)
+                .orElseThrow(() -> new NotFoundException(String.format("User with id: %d not found.", id)));
+
+        manager.setAccess(false);
+        managerRepository.save(manager);
+    }
+
+    @Override
+    public void unbanManager(Long id) {
+        Manager manager = managerRepository
+                .findById(id)
+                .orElseThrow(() -> new NotFoundException(String.format("User with id: %d not found.", id)));
+
+        manager.setAccess(true);
+        managerRepository.save(manager);
+    }
+
+    @Override
+    public ManagerDto updateManagerProfile(Long id, ManagerUpdateDto managerUpdateDto) {
+        Manager manager = managerRepository
+                .findById(id)
+                .orElseThrow(() -> new NotFoundException(String.format("Manager with id: %d not found.", id)));
+        // TODO: proveriti da li je korisnik uneo neki novi mejl, ako jeste, poslati mu verifikaciju na novi mejl,
+        // ako nije, samo nastavljamo dalje
+
+        manager.setFirstName(managerUpdateDto.getFirstName());
+        manager.setLastName((managerUpdateDto.getLastName()));
+        manager.setUsername(managerUpdateDto.getUsername());
+        manager.setEmail((managerUpdateDto.getEmail()));
+        manager.setPhoneNumber((managerUpdateDto.getPhoneNumber()));
+        manager.setPassword((managerUpdateDto.getPassword()));
+        return managerMapper.managerToManagerDto(managerRepository.save(manager));
     }
 }

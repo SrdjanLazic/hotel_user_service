@@ -3,6 +3,8 @@ package com.raf.hoteluserservice.service.impl;
 import com.raf.hoteluserservice.domain.Client;
 import com.raf.hoteluserservice.domain.ClientRank;
 import com.raf.hoteluserservice.dto.*;
+import com.raf.hoteluserservice.exception.CustomException;
+import com.raf.hoteluserservice.exception.ErrorCode;
 import com.raf.hoteluserservice.exception.NotFoundException;
 import com.raf.hoteluserservice.mapper.ClientMapper;
 import com.raf.hoteluserservice.mapper.ManagerMapper;
@@ -15,6 +17,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -99,6 +102,11 @@ public class ClientServiceImpl implements ClientService {
 //            throw new CustomException("Please verify your e-mail address before logging in", ErrorCode.EMAIL_NOT_VERIFIED, HttpStatus.PRECONDITION_FAILED);
 
         //Create token payload
+
+        if (!client.isAccess())
+            throw new CustomException("Your account is banned. Contact customer support.", ErrorCode.ACCESS_DENIED, HttpStatus.PRECONDITION_FAILED);
+
+
         Claims claims = Jwts.claims();
         claims.put("id", client.getId());
         claims.put("role", client.getRole().getName());
@@ -142,7 +150,6 @@ public class ClientServiceImpl implements ClientService {
         client.setEmail((clientUpdateDto.getEmail()));
         client.setPhoneNumber((clientUpdateDto.getPhoneNumber()));
         client.setPassportNumber(clientUpdateDto.getPassportNumber());
-        clientRepository.save(client);
-        return clientMapper.clientToClientDto(client);
+        return clientMapper.clientToClientDto(clientRepository.save(client));
     }
 }

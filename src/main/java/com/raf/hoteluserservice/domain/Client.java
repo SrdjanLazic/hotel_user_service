@@ -1,5 +1,7 @@
 package com.raf.hoteluserservice.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -16,6 +18,7 @@ public class Client {
     private String password;
     private String email;
     private String phoneNumber;
+    @JsonFormat(pattern="dd-MM-yyyy")
     private LocalDate birthday;
     private String passportNumber;
     @ManyToOne(optional = false)
