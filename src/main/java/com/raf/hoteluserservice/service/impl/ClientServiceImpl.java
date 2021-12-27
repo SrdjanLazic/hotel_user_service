@@ -6,6 +6,7 @@ import com.raf.hoteluserservice.dto.*;
 import com.raf.hoteluserservice.exception.CustomException;
 import com.raf.hoteluserservice.exception.ErrorCode;
 import com.raf.hoteluserservice.exception.NotFoundException;
+import com.raf.hoteluserservice.listener.helper.MessageHelper;
 import com.raf.hoteluserservice.mapper.ClientMapper;
 import com.raf.hoteluserservice.mapper.ManagerMapper;
 import com.raf.hoteluserservice.repository.ClientRankRepository;
@@ -15,9 +16,11 @@ import com.raf.hoteluserservice.security.service.TokenService;
 import com.raf.hoteluserservice.service.ClientService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,13 +35,20 @@ public class ClientServiceImpl implements ClientService {
     private ClientRepository clientRepository;
     private ClientRankRepository clientRankRepository;
     private ClientMapper clientMapper;
+    private JmsTemplate jmsTemplate;
+    private String addClientDestination;
+    private MessageHelper messageHelper;
 
     public ClientServiceImpl(TokenService tokenService, ClientRepository clientRepository, ClientRankRepository clientRankRepository, ClientMapper clientMapper,
-                             ManagerMapper managerMapper, ManagerRepository managerRepository) {
+                             ManagerMapper managerMapper, @Value("${destination.addClient}") String addClientDestination, ManagerRepository managerRepository, JmsTemplate jmsTemplate,
+                             MessageHelper messageHelper) {
         this.tokenService = tokenService;
         this.clientRepository = clientRepository;
         this.clientRankRepository = clientRankRepository;
         this.clientMapper = clientMapper;
+        this.jmsTemplate = jmsTemplate;
+        this.addClientDestination = addClientDestination;
+        this.messageHelper = messageHelper;
     }
 
     @Override
@@ -53,6 +63,7 @@ public class ClientServiceImpl implements ClientService {
         Client client = clientMapper.clientCreateDtoToClient(clientCreateDto);
         clientRepository.save(client);
         // TODO: slanje mejla
+        jmsTemplate.convertAndSend(addClientDestination, messageHelper.createTextMessage(clientCreateDto.getEmail()));
         return clientMapper.clientToClientDto(client);
     }
 
