@@ -62,8 +62,8 @@ public class ClientServiceImpl implements ClientService {
     public ClientDto addClient(ClientCreateDto clientCreateDto) {
         Client client = clientMapper.clientCreateDtoToClient(clientCreateDto);
         clientRepository.save(client);
-        // TODO: slanje mejla
-        jmsTemplate.convertAndSend(addClientDestination, messageHelper.createTextMessage(clientCreateDto.getEmail()));
+        // TODO: ceo objekat ili samo getmejl?
+        jmsTemplate.convertAndSend(addClientDestination, messageHelper.createTextMessage(clientCreateDto));
         return clientMapper.clientToClientDto(client);
     }
 
