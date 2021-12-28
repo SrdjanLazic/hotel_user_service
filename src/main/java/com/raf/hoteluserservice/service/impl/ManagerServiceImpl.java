@@ -140,4 +140,14 @@ public class ManagerServiceImpl implements ManagerService {
         manager.setPassword((managerUpdateDto.getPassword()));
         return managerMapper.managerToManagerDto(managerRepository.save(manager));
     }
+
+    @Override
+    public void verifyMail(String email) {
+       Manager manager = managerRepository
+                .findManagerByEmail(email)
+                .orElseThrow(() -> new NotFoundException(String.format("User with email: %s not found.", email)));
+
+        manager.setVerifiedMail(true);
+        managerRepository.save(manager);
+    }
 }

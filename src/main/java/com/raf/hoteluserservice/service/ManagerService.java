@@ -22,4 +22,6 @@ public interface ManagerService {
 
     ManagerDto updateManagerProfile(Long id, ManagerUpdateDto managerUpdateDto);
 
+    void verifyMail(String email);
+
 }

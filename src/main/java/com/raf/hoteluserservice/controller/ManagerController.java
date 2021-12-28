@@ -72,6 +72,13 @@ public class ManagerController {
         return new ResponseEntity<>(managerService.addManager(managerCreateDto), HttpStatus.CREATED);
     }
 
+    @GetMapping("/verifyMail/{email}")
+    public ResponseEntity<Void> verifyMail(@PathVariable("email") String email) {
+        System.out.println("Stigao u get");
+        managerService.verifyMail(email);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @ApiOperation(value = "Login")
     @PostMapping("/login")
     public ResponseEntity<TokenResponseDto> loginManager(@RequestBody @Valid TokenRequestDto tokenRequestDto) {
