@@ -24,4 +24,6 @@ public interface ClientService {
 
     ClientDto updateClientProfile(Long id, ClientUpdateDto clientUpdateDto);
 
+    void verifyMail(String email);
+
 }

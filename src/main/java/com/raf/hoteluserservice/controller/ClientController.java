@@ -53,6 +53,13 @@ public class ClientController {
         return new ResponseEntity<>(clientService.findDiscount(id), HttpStatus.OK);
     }
 
+    @GetMapping("/verifyMail/{email}")
+    public ResponseEntity<Void> verifyMail(@PathVariable("email") String email) {
+        System.out.println("Stigao u get");
+        clientService.verifyMail(email);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @PutMapping("/{id}/ban")
     @CheckSecurity(roles = {"ROLE_ADMIN"})
     public ResponseEntity<Void> banClient(@RequestHeader("Authorization") String authorization, @PathVariable("id") Long id){

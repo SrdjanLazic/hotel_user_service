@@ -62,7 +62,6 @@ public class ClientServiceImpl implements ClientService {
     public ClientDto addClient(ClientCreateDto clientCreateDto) {
         Client client = clientMapper.clientCreateDtoToClient(clientCreateDto);
         clientRepository.save(client);
-        // TODO: ceo objekat ili samo getmejl?
         jmsTemplate.convertAndSend(addClientDestination, messageHelper.createTextMessage(clientCreateDto));
         return clientMapper.clientToClientDto(client);
     }
@@ -162,5 +161,15 @@ public class ClientServiceImpl implements ClientService {
         client.setPhoneNumber((clientUpdateDto.getPhoneNumber()));
         client.setPassportNumber(clientUpdateDto.getPassportNumber());
         return clientMapper.clientToClientDto(clientRepository.save(client));
+    }
+
+    @Override
+    public void verifyMail(String email) {
+        Client client = clientRepository
+                .findClientByEmail(email)
+                .orElseThrow(() -> new NotFoundException(String.format("User with email: %s not found.", email)));
+
+        client.setVerifiedMail(true);
+        clientRepository.save(client);
     }
 }
