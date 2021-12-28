@@ -28,9 +28,6 @@ public class ClientRankServiceImpl implements ClientRankService {
         ClientRank clientRank = clientRankRepository
                 .findRankByName(name)
                 .orElseThrow(() -> new NotFoundException(String.format("Client rank with name: %s not found.", name)));
-        // TODO: proveriti da li je korisnik uneo neki novi mejl, ako jeste, poslati mu verifikaciju na novi mejl,
-        // ako nije, samo nastavljamo dalje
-
 
         clientRank.setMaxNumberOfReservations(clientRankUpdateDto.getMaxNumberOfReservations());
         clientRank.setMinNumberOfReservations(clientRankUpdateDto.getMinNumberOfReservations());

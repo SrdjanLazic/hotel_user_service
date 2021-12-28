@@ -6,6 +6,7 @@ import com.raf.hoteluserservice.dto.*;
 import com.raf.hoteluserservice.exception.CustomException;
 import com.raf.hoteluserservice.exception.ErrorCode;
 import com.raf.hoteluserservice.exception.NotFoundException;
+import com.raf.hoteluserservice.listener.helper.MessageHelper;
 import com.raf.hoteluserservice.mapper.ClientMapper;
 import com.raf.hoteluserservice.mapper.ManagerMapper;
 import com.raf.hoteluserservice.repository.ClientRankRepository;
@@ -15,9 +16,11 @@ import com.raf.hoteluserservice.security.service.TokenService;
 import com.raf.hoteluserservice.service.ManagerService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,16 +33,23 @@ public class ManagerServiceImpl implements ManagerService {
     private ClientRankRepository clientRankRepository;
     private ClientMapper clientMapper;
     private ManagerMapper managerMapper;
+    private JmsTemplate jmsTemplate;
     private ManagerRepository managerRepository;
+    private String addManagerDestination;
+    private MessageHelper messageHelper;
 
     public ManagerServiceImpl(TokenService tokenService, ClientRepository clientRepository, ClientRankRepository clientRankRepository, ClientMapper clientMapper,
-                              ManagerMapper managerMapper, ManagerRepository managerRepository) {
+                              ManagerMapper managerMapper, @Value("${destination.addManager}") String addManagerDestination, ManagerRepository managerRepository,
+                              JmsTemplate jmsTemplate, MessageHelper messageHelper) {
         this.tokenService = tokenService;
         this.clientRepository = clientRepository;
         this.clientRankRepository = clientRankRepository;
         this.clientMapper = clientMapper;
         this.managerMapper = managerMapper;
         this.managerRepository = managerRepository;
+        this.addManagerDestination = addManagerDestination;
+        this.jmsTemplate = jmsTemplate;
+        this.messageHelper = messageHelper;
     }
 
 
@@ -48,6 +58,7 @@ public class ManagerServiceImpl implements ManagerService {
     public ManagerDto addManager(ManagerCreateDto managerCreateDto) {
         Manager manager = managerMapper.managerCreateDtoToManager(managerCreateDto);
         managerRepository.save(manager);
+        jmsTemplate.convertAndSend(addManagerDestination, messageHelper.createTextMessage(managerCreateDto));
         // TODO: slanje mejla
         return managerMapper.managerToManagerDto(manager);
     }
