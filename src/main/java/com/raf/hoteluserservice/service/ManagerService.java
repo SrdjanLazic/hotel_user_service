@@ -10,6 +10,8 @@ public interface ManagerService {
 
     Page<ManagerDto> findAll(Pageable pageable);
 
+    ManagerDto findById(Long id);
+
     ManagerDto addManager(ManagerCreateDto managerCreateDto);
 
     ManagerDto getManager(Long id);

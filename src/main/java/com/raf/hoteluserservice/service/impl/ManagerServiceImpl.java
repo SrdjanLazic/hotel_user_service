@@ -71,6 +71,12 @@ public class ManagerServiceImpl implements ManagerService {
     }
 
     @Override
+    public ManagerDto findById(Long id) {
+        Manager manager = managerRepository.findById(id).orElseThrow(() -> new NotFoundException("Client with requested id not found"));
+        return managerMapper.managerToManagerDto(manager);
+    }
+
+    @Override
     public ManagerDto getManager(Long id) {
         Manager manager = managerRepository
                 .findById(id)
