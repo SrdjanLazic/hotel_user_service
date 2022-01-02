@@ -57,6 +57,12 @@ public class ClientServiceImpl implements ClientService {
                 .map(clientMapper::clientToClientDto);
     }
 
+    @Override
+    public ClientDto findById(Long id) {
+        Client client = clientRepository.findById(id).orElseThrow(() -> new NotFoundException("Client with requested id not found"));
+        return clientMapper.clientToClientDto(client);
+    }
+
 
     @Override
     public ClientDto addClient(ClientCreateDto clientCreateDto) {

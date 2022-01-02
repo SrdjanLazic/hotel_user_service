@@ -74,7 +74,6 @@ public class ManagerController {
 
     @GetMapping("/verifyMail/{email}")
     public ResponseEntity<Void> verifyMail(@PathVariable("email") String email) {
-        System.out.println("Stigao u get");
         managerService.verifyMail(email);
         return new ResponseEntity<>(HttpStatus.OK);
     }

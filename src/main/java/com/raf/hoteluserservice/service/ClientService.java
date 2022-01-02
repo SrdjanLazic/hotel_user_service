@@ -10,6 +10,8 @@ public interface ClientService {
 
     Page<ClientDto> findAll(Pageable pageable);
 
+    ClientDto findById(Long id);
+
     ClientDto addClient(ClientCreateDto clientCreateDto);
 
     ClientDto getClient(Long id);

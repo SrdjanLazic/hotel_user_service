@@ -55,7 +55,6 @@ public class ClientController {
 
     @GetMapping("/verifyMail/{email}")
     public ResponseEntity<Void> verifyMail(@PathVariable("email") String email) {
-        System.out.println("Stigao u get");
         clientService.verifyMail(email);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -92,6 +91,11 @@ public class ClientController {
     @PostMapping("/login")
     public ResponseEntity<TokenResponseDto> loginClient(@RequestBody @Valid TokenRequestDto tokenRequestDto) {
         return new ResponseEntity<>(clientService.login(tokenRequestDto), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ClientDto> findById(@PathVariable("id") Long id) {
+        return new ResponseEntity<>(clientService.findById(id), HttpStatus.OK);
     }
 
 
