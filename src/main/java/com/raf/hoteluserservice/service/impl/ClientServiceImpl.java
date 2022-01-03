@@ -185,7 +185,7 @@ public class ClientServiceImpl implements ClientService {
                 .findById(id)
                 .orElseThrow(() -> new NotFoundException(String.format("User with id: %s not found.", id)));
         jmsTemplate.convertAndSend(addClientDestination, messageHelper.createTextMessage(clientPasswordDto));
-
+        client.setPassword(clientPasswordDto.getPassword());
     }
 
     @Override
@@ -193,9 +193,6 @@ public class ClientServiceImpl implements ClientService {
         Client client = clientRepository
                 .findById(id)
                 .orElseThrow(() -> new NotFoundException(String.format("User with id: %s not found.", id)));
-
-
-
-
+        clientRepository.save(client);
     }
 }
