@@ -81,6 +81,15 @@ public class ClientController {
         return ResponseEntity.ok(clientService.updateClientProfile(id, clientUpdateDto));
     }
 
+    @PutMapping("/{id}/update-password")
+    @CheckSecurity(roles = {"ROLE_CLIENT", "ROLE_ADMIN"})
+    public ResponseEntity<ClientDto> updateClientPassword(@RequestHeader("Authorization") String authorization,
+                                                         @PathVariable("id") Long id, @RequestBody @Valid ClientPasswordDto clientPasswordDto) {
+        clientService.changePassword(id, clientPasswordDto);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
     @ApiOperation(value = "Register client")
     @PostMapping
     public ResponseEntity<ClientDto> saveClient(@RequestBody @Valid ClientCreateDto clientCreateDto) {
@@ -98,6 +107,12 @@ public class ClientController {
         return new ResponseEntity<>(clientService.findById(id), HttpStatus.OK);
     }
 
+
+    @PutMapping("changePassword/{id}")
+    public ResponseEntity<Void> changePassword(@RequestHeader("Authorization") String authorization, @PathVariable("id") Long id){
+        clientService.saveNewPassword(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 
 }

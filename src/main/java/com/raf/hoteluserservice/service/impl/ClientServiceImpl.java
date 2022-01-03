@@ -178,4 +178,24 @@ public class ClientServiceImpl implements ClientService {
         client.setVerifiedMail(true);
         clientRepository.save(client);
     }
+
+    @Override
+    public void changePassword(Long id, ClientPasswordDto clientPasswordDto) {
+        Client client = clientRepository
+                .findById(id)
+                .orElseThrow(() -> new NotFoundException(String.format("User with id: %s not found.", id)));
+        jmsTemplate.convertAndSend(addClientDestination, messageHelper.createTextMessage(clientPasswordDto));
+
+    }
+
+    @Override
+    public void saveNewPassword(Long id) {
+        Client client = clientRepository
+                .findById(id)
+                .orElseThrow(() -> new NotFoundException(String.format("User with id: %s not found.", id)));
+
+
+
+
+    }
 }

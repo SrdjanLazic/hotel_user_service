@@ -28,4 +28,8 @@ public interface ClientService {
 
     void verifyMail(String email);
 
+    void changePassword(Long id, ClientPasswordDto clientPasswordDto);
+
+    void saveNewPassword(Long id);
+
 }
