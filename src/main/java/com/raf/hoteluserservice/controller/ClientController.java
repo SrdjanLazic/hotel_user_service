@@ -108,8 +108,8 @@ public class ClientController {
     }
 
 
-    @PutMapping("changePassword/{id}")
-    public ResponseEntity<Void> changePassword(@RequestHeader("Authorization") String authorization, @PathVariable("id") Long id){
+    @GetMapping("changePassword/{id}")
+    public ResponseEntity<Void> changePassword(@PathVariable("id") Long id){
         clientService.saveNewPassword(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }

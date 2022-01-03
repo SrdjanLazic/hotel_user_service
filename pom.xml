@@ -11,7 +11,7 @@
 	<groupId>com.raf</groupId>
 	<artifactId>hotel-user-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>cinema-user-service</name>
+	<name>hotel-user-service</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>

@@ -37,17 +37,20 @@ public class ClientServiceImpl implements ClientService {
     private ClientMapper clientMapper;
     private JmsTemplate jmsTemplate;
     private String addClientDestination;
+    private String passwordClientDestination;
     private MessageHelper messageHelper;
 
     public ClientServiceImpl(TokenService tokenService, ClientRepository clientRepository, ClientRankRepository clientRankRepository, ClientMapper clientMapper,
-                             ManagerMapper managerMapper, @Value("${destination.addClient}") String addClientDestination, ManagerRepository managerRepository, JmsTemplate jmsTemplate,
-                             MessageHelper messageHelper) {
+                             ManagerMapper managerMapper, @Value("${destination.addClient}") String addClientDestination,
+                             ManagerRepository managerRepository, JmsTemplate jmsTemplate,
+                             @Value("${destination.passwordClient}") String passwordClientDestination, MessageHelper messageHelper) {
         this.tokenService = tokenService;
         this.clientRepository = clientRepository;
         this.clientRankRepository = clientRankRepository;
         this.clientMapper = clientMapper;
         this.jmsTemplate = jmsTemplate;
         this.addClientDestination = addClientDestination;
+        this.passwordClientDestination = passwordClientDestination;
         this.messageHelper = messageHelper;
     }
 
@@ -184,7 +187,7 @@ public class ClientServiceImpl implements ClientService {
         Client client = clientRepository
                 .findById(id)
                 .orElseThrow(() -> new NotFoundException(String.format("User with id: %s not found.", id)));
-        jmsTemplate.convertAndSend(addClientDestination, messageHelper.createTextMessage(clientPasswordDto));
+        jmsTemplate.convertAndSend(passwordClientDestination, messageHelper.createTextMessage(clientPasswordDto));
         client.setPassword(clientPasswordDto.getPassword());
     }
 
