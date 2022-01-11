@@ -4,6 +4,7 @@ import javax.validation.constraints.NotBlank;
 
 public class ClientRankDto {
 
+    private String name;
     private Integer minNumberOfReservations;
     private Integer maxNumberOfReservations;
     private Double discount;
@@ -33,5 +34,13 @@ public class ClientRankDto {
 
     public void setDiscount(Double discount) {
         this.discount = discount;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

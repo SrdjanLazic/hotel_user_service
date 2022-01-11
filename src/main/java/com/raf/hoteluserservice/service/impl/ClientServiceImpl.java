@@ -117,8 +117,10 @@ public class ClientServiceImpl implements ClientService {
                                 tokenRequestDto.getPassword())));
 
         // TODO: treba implementirati ovu proveru da li je client verifikovan
-//        if (!client.getVerified())
-//            throw new CustomException("Please verify your e-mail address before logging in", ErrorCode.EMAIL_NOT_VERIFIED, HttpStatus.PRECONDITION_FAILED);
+        if (!client.isVerifiedMail()) {
+            System.out.println(client.isVerifiedMail());
+            throw new CustomException("Please verify your e-mail address before logging in", ErrorCode.EMAIL_NOT_VERIFIED, HttpStatus.PRECONDITION_FAILED);
+        }
 
         //Create token payload
 

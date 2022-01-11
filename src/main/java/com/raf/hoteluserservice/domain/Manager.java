@@ -21,12 +21,6 @@ public class Manager {
     @JsonFormat(pattern="dd-MM-yyyy")
     private LocalDate birthday;
     private String hotel;
-
-    // TODO: proveriti
-//    @OneToOne(optional = false)
-//    @Embedded
-//    private Hotel hotel;
-
     @ManyToOne(optional = false)
     private Role role; // privilegije
     private boolean access = true;

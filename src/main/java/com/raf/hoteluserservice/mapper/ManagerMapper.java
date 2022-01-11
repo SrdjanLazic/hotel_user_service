@@ -27,7 +27,7 @@ public class ManagerMapper {
         managerDto.setUsername(manager.getUsername());
         managerDto.setPhoneNumber(manager.getPhoneNumber());
         managerDto.setBirthday(manager.getBirthday());
-        //managerDto.setHotel(manager.getHotel());
+        managerDto.setHotel(manager.getHotel());
         return managerDto;
     }
 
@@ -43,9 +43,7 @@ public class ManagerMapper {
         manager.setBirthday(managerCreateDto.getBirthday());
         manager.setEmploymentDate(managerCreateDto.getEmploymentDate());
         manager.setRole(roleRepository.findRoleByName("ROLE_MANAGER").get());
-        //manager.setHotel(managerCreateDto.getHotel());
-        // TODO: popuniti polja za hotel
-        //Hotel hotel = new Hotel();
+        manager.setHotel(managerCreateDto.getHotel());
         manager.setAccess(true);
         manager.setVerifiedMail(false);
         return manager;

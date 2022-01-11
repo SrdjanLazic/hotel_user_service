@@ -94,8 +94,8 @@ public class ManagerServiceImpl implements ManagerService {
                                 tokenRequestDto.getPassword())));
 
         // TODO: treba implementirati ovu proveru da li je client verifikovan
-//        if (!client.getVerified())
-//            throw new CustomException("Please verify your e-mail address before logging in", ErrorCode.EMAIL_NOT_VERIFIED, HttpStatus.PRECONDITION_FAILED);
+        if (!manager.isVerifiedMail())
+            throw new CustomException("Please verify your e-mail address before logging in", ErrorCode.EMAIL_NOT_VERIFIED, HttpStatus.PRECONDITION_FAILED);
 
         //Create token payload
 

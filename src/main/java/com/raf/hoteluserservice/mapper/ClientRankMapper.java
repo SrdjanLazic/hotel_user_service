@@ -16,6 +16,7 @@ public class ClientRankMapper {
         clientRankDto.setDiscount(clientRank.getDiscount());
         clientRankDto.setMaxNumberOfReservations(clientRank.getMaxNumberOfReservations());
         clientRankDto.setMinNumberOfReservations(clientRank.getMinNumberOfReservations());
+        clientRankDto.setName(clientRank.getName());
         return clientRankDto;
     }
 

@@ -1,5 +1,5 @@
 package com.raf.hoteluserservice.exception;
 
 public enum ErrorCode {
-    RESOURCE_NOT_FOUND, ACCESS_DENIED
+    RESOURCE_NOT_FOUND, ACCESS_DENIED, EMAIL_NOT_VERIFIED
 }
