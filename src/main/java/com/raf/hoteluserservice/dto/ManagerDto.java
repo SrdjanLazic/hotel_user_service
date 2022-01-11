@@ -12,7 +12,7 @@ public class ManagerDto {
     private String email;
     private String phoneNumber;
     private LocalDate birthday;
-//    private Hotel hotel;
+    private String hotel;
 
     public ManagerDto() {
     }
@@ -73,7 +73,15 @@ public class ManagerDto {
         this.birthday = birthday;
     }
 
-//    public Hotel getHotel() {
+    public String getHotel() {
+        return hotel;
+    }
+
+    public void setHotel(String hotel) {
+        this.hotel = hotel;
+    }
+
+    //    public Hotel getHotel() {
 //        return hotel;
 //    }
 //

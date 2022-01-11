@@ -8,7 +8,7 @@ public class TokenRequestDto {
     public TokenRequestDto() {
     }
 
-    public TokenRequestDto(String username, String password, String email) {
+    public TokenRequestDto(String email, String password) {
         this.password = password;
         this.email = email;
     }

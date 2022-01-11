@@ -26,6 +26,8 @@ public class ManagerCreateDto {
     private LocalDate birthday;
     @JsonFormat(pattern="dd-MM-yyyy")
     private LocalDate employmentDate;
+    @NotBlank
+    private String hotel;
 
     // TODO:
 //    @NotNull
@@ -96,5 +98,13 @@ public class ManagerCreateDto {
 
     public void setEmploymentDate(LocalDate employmentDate) {
         this.employmentDate = employmentDate;
+    }
+
+    public String getHotel() {
+        return hotel;
+    }
+
+    public void setHotel(String hotel) {
+        this.hotel = hotel;
     }
 }

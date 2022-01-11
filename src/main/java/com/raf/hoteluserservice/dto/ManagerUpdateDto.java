@@ -18,7 +18,8 @@ public class ManagerUpdateDto {
     private String email;
     @NotBlank
     private String phoneNumber;
-    //TODO: HOTEL
+    @NotBlank
+    private String hotel;
 
     public ManagerUpdateDto() {
     }

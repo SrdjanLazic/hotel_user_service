@@ -20,6 +20,7 @@ public class Manager {
     private String phoneNumber;
     @JsonFormat(pattern="dd-MM-yyyy")
     private LocalDate birthday;
+    private String hotel;
 
     // TODO: proveriti
 //    @OneToOne(optional = false)
@@ -100,13 +101,13 @@ public class Manager {
         this.birthday = birthday;
     }
 
-//    public Hotel getHotel() {
-//        return hotel;
-//    }
-//
-//    public void setHotel(Hotel hotel) {
-//        this.hotel = hotel;
-//    }
+    public String getHotel() {
+        return hotel;
+    }
+
+    public void setHotel(String hotel) {
+        this.hotel = hotel;
+    }
 
     public Role getRole() {
         return role;
