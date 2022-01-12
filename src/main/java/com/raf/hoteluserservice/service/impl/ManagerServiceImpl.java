@@ -36,10 +36,12 @@ public class ManagerServiceImpl implements ManagerService {
     private JmsTemplate jmsTemplate;
     private ManagerRepository managerRepository;
     private String addManagerDestination;
+    private String passwordManagerDestination;
     private MessageHelper messageHelper;
 
     public ManagerServiceImpl(TokenService tokenService, ClientRepository clientRepository, ClientRankRepository clientRankRepository, ClientMapper clientMapper,
                               ManagerMapper managerMapper, @Value("${destination.addManager}") String addManagerDestination, ManagerRepository managerRepository,
+                              @Value("${destination.passwordManager}") String passwordManagerDestination,
                               JmsTemplate jmsTemplate, MessageHelper messageHelper) {
         this.tokenService = tokenService;
         this.clientRepository = clientRepository;
@@ -50,6 +52,7 @@ public class ManagerServiceImpl implements ManagerService {
         this.addManagerDestination = addManagerDestination;
         this.jmsTemplate = jmsTemplate;
         this.messageHelper = messageHelper;
+        this.passwordManagerDestination = passwordManagerDestination;
     }
 
 
@@ -143,7 +146,7 @@ public class ManagerServiceImpl implements ManagerService {
         manager.setUsername(managerUpdateDto.getUsername());
         manager.setEmail((managerUpdateDto.getEmail()));
         manager.setPhoneNumber((managerUpdateDto.getPhoneNumber()));
-        manager.setPassword((managerUpdateDto.getPassword()));
+        manager.setHotel((managerUpdateDto.getHotel()));
         return managerMapper.managerToManagerDto(managerRepository.save(manager));
     }
 
@@ -151,9 +154,28 @@ public class ManagerServiceImpl implements ManagerService {
     public void verifyMail(String email) {
        Manager manager = managerRepository
                 .findManagerByEmail(email)
-                .orElseThrow(() -> new NotFoundException(String.format("User with email: %s not found.", email)));
+                .orElseThrow(() -> new NotFoundException(String.format("Manager with email: %s not found.", email)));
 
         manager.setVerifiedMail(true);
+        managerRepository.save(manager);
+    }
+
+    @Override
+    public void changePassword(Long id, ManagerPasswordDto managerPasswordDto) {
+        System.out.println("\nU metodi changePassword u ManagerServiceImpl");
+        Manager manager = managerRepository
+                .findById(id)
+                .orElseThrow(() -> new NotFoundException(String.format("Manager with id: %s not found.", id)));
+        System.out.println("\nNaziv queuea: " + passwordManagerDestination);
+        jmsTemplate.convertAndSend(passwordManagerDestination, messageHelper.createTextMessage(managerPasswordDto));
+        manager.setPassword(managerPasswordDto.getPassword());
+    }
+
+    @Override
+    public void saveNewPassword(Long id) {
+        Manager manager = managerRepository
+                .findById(id)
+                .orElseThrow(() -> new NotFoundException(String.format("Manager with id: %s not found.", id)));
         managerRepository.save(manager);
     }
 }

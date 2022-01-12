@@ -26,4 +26,7 @@ public interface ManagerService {
 
     void verifyMail(String email);
 
+    void changePassword(Long id, ManagerPasswordDto managerPasswordDto);
+
+    void saveNewPassword(Long id);
 }

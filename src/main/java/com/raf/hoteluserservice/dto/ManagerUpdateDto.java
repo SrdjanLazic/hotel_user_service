@@ -12,8 +12,6 @@ public class ManagerUpdateDto {
     @NotBlank
     private String username;
     @NotBlank
-    private String password;
-    @NotBlank
     @Email
     private String email;
     @NotBlank
@@ -64,11 +62,11 @@ public class ManagerUpdateDto {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getPassword() {
-        return password;
+    public String getHotel() {
+        return hotel;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setHotel(String hotel) {
+        this.hotel = hotel;
     }
 }

@@ -13,7 +13,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/manager")
@@ -59,8 +62,17 @@ public class ManagerController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PutMapping("/{id}/update-password")
+    @CheckSecurity(roles = {"ROLE_MANAGER"})
+    public ResponseEntity<ClientDto> updateManagerPassword(@RequestHeader("Authorization") String authorization,
+                                                          @PathVariable("id") Long id, @RequestBody @Valid ManagerPasswordDto managerPasswordDto) {
+        System.out.println("\nU metodi updateManagerPassword u Manager kontroleru");
+        managerService.changePassword(id, managerPasswordDto);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @PutMapping("/{id}/update")
-    @CheckSecurity(roles = {"ROLE_MANAGER", "ROLE_ADMIN"})
+    @CheckSecurity(roles = {"ROLE_MANAGER"})
     public ResponseEntity<ManagerDto> updateManagerProfile(@RequestHeader("Authorization") String authorization,
                                                          @PathVariable("id") Long id, @RequestBody @Valid ManagerUpdateDto managerUpdateDto) {
         return ResponseEntity.ok(managerService.updateManagerProfile(id, managerUpdateDto));
@@ -73,8 +85,9 @@ public class ManagerController {
     }
 
     @GetMapping("/verifyMail/{email}")
-    public ResponseEntity<Void> verifyMail(@PathVariable("email") String email) {
+    public ResponseEntity<Void> verifyMail(@PathVariable("email") String email, HttpServletResponse httpServletResponse) throws IOException {
         managerService.verifyMail(email);
+        httpServletResponse.getWriter().println("Email successfully verified.");
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -87,6 +100,13 @@ public class ManagerController {
     @GetMapping("/{id}")
     public ResponseEntity<ManagerDto> findById(@PathVariable("id") Long id) {
         return new ResponseEntity<>(managerService.findById(id), HttpStatus.OK);
+    }
+
+    @GetMapping("changePassword/{id}")
+    public ResponseEntity<Void> changePassword(@PathVariable("id") Long id, HttpServletResponse httpServletResponse) throws IOException {
+        managerService.saveNewPassword(id);
+        httpServletResponse.getWriter().println("Password successfully changed.");
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

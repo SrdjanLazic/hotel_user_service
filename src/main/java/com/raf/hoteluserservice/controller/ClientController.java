@@ -12,7 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/client")
@@ -54,8 +56,9 @@ public class ClientController {
     }
 
     @GetMapping("/verifyMail/{email}")
-    public ResponseEntity<Void> verifyMail(@PathVariable("email") String email) {
+    public ResponseEntity<Void> verifyMail(@PathVariable("email") String email, HttpServletResponse response) throws IOException {
         clientService.verifyMail(email);
+        response.getWriter().println("Email successfully verified.");
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -108,8 +111,9 @@ public class ClientController {
 
 
     @GetMapping("changePassword/{id}")
-    public ResponseEntity<Void> changePassword(@PathVariable("id") Long id){
+    public ResponseEntity<Void> changePassword(@PathVariable("id") Long id, HttpServletResponse httpServletResponse) throws IOException {
         clientService.saveNewPassword(id);
+        httpServletResponse.getWriter().println("Password successfully changed.");
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
