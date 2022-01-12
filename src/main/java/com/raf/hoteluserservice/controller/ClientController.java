@@ -73,16 +73,15 @@ public class ClientController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    // TODO: videti da li moze da bude i samo /id
     @PutMapping("/{id}/update")
-    @CheckSecurity(roles = {"ROLE_CLIENT", "ROLE_ADMIN"})
+    @CheckSecurity(roles = {"ROLE_CLIENT"})
     public ResponseEntity<ClientDto> updateClientProfile(@RequestHeader("Authorization") String authorization,
                                                          @PathVariable("id") Long id, @RequestBody @Valid ClientUpdateDto clientUpdateDto) {
         return ResponseEntity.ok(clientService.updateClientProfile(id, clientUpdateDto));
     }
 
     @PutMapping("/{id}/update-password")
-    @CheckSecurity(roles = {"ROLE_CLIENT", "ROLE_ADMIN"})
+    @CheckSecurity(roles = {"ROLE_CLIENT"})
     public ResponseEntity<ClientDto> updateClientPassword(@RequestHeader("Authorization") String authorization,
                                                          @PathVariable("id") Long id, @RequestBody @Valid ClientPasswordDto clientPasswordDto) {
         clientService.changePassword(id, clientPasswordDto);
