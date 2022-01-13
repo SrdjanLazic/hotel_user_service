@@ -21,7 +21,6 @@ import java.io.IOException;
 public class ClientController {
 
     private ClientService clientService;
-    // komentar
 
     public ClientController(ClientService clientService) {
         this.clientService = clientService;
