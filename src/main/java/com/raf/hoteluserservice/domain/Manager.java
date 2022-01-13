@@ -134,4 +134,6 @@ public class Manager {
     public void setVerifiedMail(boolean verifiedMail) {
         this.verifiedMail = verifiedMail;
     }
+
+
 }

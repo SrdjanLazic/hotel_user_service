@@ -16,6 +16,7 @@ public class ClientDto {
     private LocalDate birthday;
     private String passportNumber;
     private Integer numberOfReservations;
+    private boolean access;
 
     public ClientDto() {
     }
@@ -90,5 +91,13 @@ public class ClientDto {
 
     public void setNumberOfReservations(Integer numberOfReservations) {
         this.numberOfReservations = numberOfReservations;
+    }
+
+    public boolean isAccess() {
+        return access;
+    }
+
+    public void setAccess(boolean access) {
+        this.access = access;
     }
 }

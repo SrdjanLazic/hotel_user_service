@@ -1,6 +1,8 @@
 package com.raf.hoteluserservice.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.LocalDate;
 
 public class ManagerDto {
@@ -11,8 +13,10 @@ public class ManagerDto {
     private String username;
     private String email;
     private String phoneNumber;
+    @JsonFormat(pattern="dd-MM-yyyy")
     private LocalDate birthday;
     private String hotel;
+    private boolean access;
 
     public ManagerDto() {
     }
@@ -88,4 +92,13 @@ public class ManagerDto {
 //    public void setHotel(Hotel hotel) {
 //        this.hotel = hotel;
 //    }
+
+
+    public boolean isAccess() {
+        return access;
+    }
+
+    public void setAccess(boolean access) {
+        this.access = access;
+    }
 }

@@ -28,6 +28,7 @@ public class ManagerMapper {
         managerDto.setPhoneNumber(manager.getPhoneNumber());
         managerDto.setBirthday(manager.getBirthday());
         managerDto.setHotel(manager.getHotel());
+        managerDto.setAccess(manager.isAccess());
         return managerDto;
     }
 

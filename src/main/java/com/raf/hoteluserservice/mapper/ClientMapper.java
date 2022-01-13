@@ -25,6 +25,7 @@ public class ClientMapper {
         clientDto.setBirthday(client.getBirthday());
         clientDto.setPassportNumber(client.getPassportNumber());
         clientDto.setNumberOfReservations(client.getNumberOfReservations());
+        clientDto.setAccess(client.isAccess());
         return clientDto;
     }
 
