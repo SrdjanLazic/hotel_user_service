@@ -29,6 +29,7 @@ public class ManagerMapper {
         managerDto.setBirthday(manager.getBirthday());
         managerDto.setHotel(manager.getHotel());
         managerDto.setAccess(manager.isAccess());
+        managerDto.setEmploymentDate(manager.getEmploymentDate());
         return managerDto;
     }
 
