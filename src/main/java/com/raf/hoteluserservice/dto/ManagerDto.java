@@ -15,6 +15,8 @@ public class ManagerDto {
     private String phoneNumber;
     @JsonFormat(pattern="dd-MM-yyyy")
     private LocalDate birthday;
+    @JsonFormat(pattern="dd-MM-yyyy")
+    private LocalDate employmentDate;
     private String hotel;
     private boolean access;
 
@@ -83,6 +85,14 @@ public class ManagerDto {
 
     public void setHotel(String hotel) {
         this.hotel = hotel;
+    }
+
+    public LocalDate getEmploymentDate() {
+        return employmentDate;
+    }
+
+    public void setEmploymentDate(LocalDate employmentDate) {
+        this.employmentDate = employmentDate;
     }
 
     //    public Hotel getHotel() {

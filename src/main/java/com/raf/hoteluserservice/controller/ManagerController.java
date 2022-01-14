@@ -98,7 +98,7 @@ public class ManagerController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ManagerDto> findById(@PathVariable("id") Long id) {
+    public ResponseEntity<ManagerDto> findManagerById(@PathVariable("id") Long id) {
         return new ResponseEntity<>(managerService.findById(id), HttpStatus.OK);
     }
 
